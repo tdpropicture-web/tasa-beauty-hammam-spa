@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --color-spa-noir: #07120A;
+  --color-spa-emerald-dark: #0B1711;
+  --color-spa-emerald: #10241A;
+  --color-spa-emerald-medium: #183325;
+  --color-spa-emerald-light: #2D553E;
+  --color-spa-gold: #C5A880;
+  --color-spa-gold-bright: #D4AF37;
+  --color-spa-gold-light: #EBD6A7;
+  --color-spa-gold-glow: #F6E6C4;
+  --color-spa-gold-dark: #9A7742;
+  --color-spa-pearl: #FDFBF7;
+  --color-spa-cream: #FAF6F0;
+  --color-spa-sand: #F2EAE0;
+  --color-spa-border: #E8DED1;
+  --color-spa-sage: #5A7565;
+  --color-spa-terracotta: #B96B48;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: #FAF6F0;
+    color: #122118;
+  }
+  
+  h1, h2, h3, .font-serif {
+    font-family: var(--font-serif);
+  }
+}
+
+/* Luxury gold shimmer utilities */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #F3E2BD 0%, #D4AF37 50%, #B28B4E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border-glow {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 15px -3px rgba(212, 175, 55, 0.15);
+}
+
+/* Subtle luxury custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B1711;
+}
+::-webkit-scrollbar-thumb {
+  background: #A68A5E;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* Luxury WhatsApp Staggered Entrance & Pulse Keyframes */
+@keyframes waSlideUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 48px, 0) scale(0.85);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate3d(0, -4px, 0) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes waIconPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-20deg);
+  }
+  75% {
+    transform: scale(1.15) rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes waTextSlide {
+  0% {
+    opacity: 0;
+    transform: translate3d(-10px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes waBadgePop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes waPulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.45), 0 10px 25px -5px rgba(23, 35, 27, 0.25);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(37, 211, 102, 0), 0 10px 25px -5px rgba(23, 35, 27, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 10px 25px -5px rgba(23, 35, 27, 0.25);
+  }
+}
