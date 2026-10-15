@@ -6,7 +6,7 @@ export const SPA_DETAILS = {
   monogram: 'TB',
   tagline: 'Discover Your Sanctuary of Serenity in Gwarinpa',
   headline: 'Authentic Moroccan Hammam & Restorative Therapeutic Massages',
-  address: '43, INU UMORU Avenue, 2nd Avenue, Gwarinpa. (Opposite H-Medix)',
+  address: '43 Inu Umoru Ave, 2nd Avenue, Gwarinpa, (Opposite H-Medix) Abuja 900108, Federal Capital Territory',
   phones: ['07011480966', '08064742679'],
   internationalPhones: ['+234 701 148 0966', '+234 806 474 2679'],
   primaryWhatsApp: '2347011480966',
@@ -18,7 +18,7 @@ export const SPA_DETAILS = {
     { days: 'Monday – Saturday', time: '9:00 AM – 8:00 PM' },
     { days: 'Sunday', time: '11:00 AM – 7:00 PM' },
   ],
-  landmarks: 'Conveniently located on INU UMORU Avenue, 2nd Avenue, opposite H-Medix in Gwarinpa, with private valet parking and discreet reception.',
+  landmarks: 'Conveniently located on INU UMORU Avenue, 2nd Avenue, opposite H-Medix in Gwarinpa, Abuja, with private valet parking and discreet reception.',
 };
 
 export const SERVICES: Service[] = [
@@ -452,7 +452,7 @@ export const FAQS: FAQItem[] = [
     id: 'faq-1',
     category: 'general',
     question: 'Where is Tasa Beauty & Hammam Spa located in Abuja?',
-    answer: 'We are situated at 43, INU UMORU Avenue, 2nd Avenue, Gwarinpa. (Opposite H-Medix). We provide convenient on-site parking and a private, tranquil entrance insulated from street noise.',
+    answer: 'We are situated at 43 Inu Umoru Ave, 2nd Avenue, Gwarinpa, (Opposite H-Medix) Abuja 900108, Federal Capital Territory. We provide convenient on-site parking and a private, tranquil entrance insulated from street noise.',
   },
   {
     id: 'faq-2',
