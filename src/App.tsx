@@ -6,10 +6,10 @@ import { HeroSection } from './components/HeroSection';
 import { ServicesSection } from './components/ServicesSection';
 import { Footer } from './components/Footer';
 import { CurrencyCode } from './utils/currency';
-import { Service, SpaPackage } from './types';
+import { Service } from './types';
+import { SERVICES } from './data/serviceMenu';
 
 const HammamExperienceSection = lazy(() => import('./components/HammamExperienceSection').then(m => ({ default: m.HammamExperienceSection })));
-const PackagesSection = lazy(() => import('./components/PackagesSection').then(m => ({ default: m.PackagesSection })));
 const InstagramFeedSection = lazy(() => import('./components/InstagramFeedSection').then(m => ({ default: m.InstagramFeedSection })));
 const GiftVoucherSection = lazy(() => import('./components/GiftVoucherSection').then(m => ({ default: m.GiftVoucherSection })));
 const TestimonialsSection = lazy(() => import('./components/TestimonialsSection').then(m => ({ default: m.TestimonialsSection })));
@@ -35,27 +35,20 @@ export default function App() {
     setIsBookingOpen(true);
   };
 
-  const handleBookPackage = (pkg: SpaPackage) => {
-    setPreSelectedId(pkg.id);
-    setIsBookingOpen(true);
-  };
-
   const handleBookTreatmentTag = (tag: string) => {
     const lower = tag.toLowerCase();
-    if (lower.includes('hammam')) {
-      handleOpenBooking('moroccan-hammam-ritual-60');
-    } else if (lower.includes('hot stone')) {
-      handleOpenBooking('hot-stone-massage-60');
-    } else if (lower.includes('deep tissue')) {
-      handleOpenBooking('deep-tissue-60');
-    } else if (lower.includes('couples') || lower.includes('suite')) {
-      handleOpenBooking('the-couples-sanctuary-retreat');
-    } else if (lower.includes('facial') || lower.includes('glow')) {
-      handleOpenBooking('radiant-botanical-facial-50');
-    } else if (lower.includes('steam')) {
-      handleOpenBooking('steam-bath-20');
+    const matchingService = SERVICES.find((service) =>
+      lower.includes(service.name.toLowerCase()) ||
+      (lower.includes('steam') && service.id === 'steam-bath-20') ||
+      (lower.includes('hammam') && service.id === 'glow-hammam') ||
+      (lower.includes('hot stone') && service.id === 'hot-stone-massage-60') ||
+      (lower.includes('deep tissue') && service.id === 'deep-tissue-60') ||
+      (lower.includes('facial') && service.id === 'brightening-facial')
+    );
+    if (matchingService) {
+      handleOpenBooking(matchingService.id);
     } else {
-      handleOpenBooking('swedish-massage-60');
+      setIsFlyerOpen(true);
     }
   };
 
@@ -97,33 +90,27 @@ export default function App() {
         />
 
         <Suspense fallback={null}>
-        {/* 3. Authentic Moroccan Hammam Experience */}
+        {/* 3. Moroccan Hammam Experience */}
         <HammamExperienceSection
-          onBookHammam={() => handleOpenBooking('moroccan-hammam-ritual-60')}
+          onBookHammam={() => handleOpenBooking('glow-hammam')}
           currency={currency}
         />
 
-        {/* 4. Curated Wellness Packages & Membership */}
-        <PackagesSection
-          onBookPackage={handleBookPackage}
-          currency={currency}
-        />
-
-        {/* 5. Instagram Sanctuary Feed & Real Treatment Moments */}
+        {/* 4. Instagram Sanctuary Feed & Real Treatment Moments */}
         <InstagramFeedSection
           onBookTreatmentTag={handleBookTreatmentTag}
         />
 
-        {/* 6. Luxury Gift Certificates */}
+        {/* 5. Luxury Gift Certificates */}
         <GiftVoucherSection currency={currency} />
 
-        {/* 7. Client Praise & Social Proof */}
+        {/* 6. Client Praise & Social Proof */}
         <TestimonialsSection />
 
-        {/* 8. About The Sanctuary & Gwarinpa Location */}
+        {/* 7. About The Sanctuary & Gwarinpa Location */}
         <AboutAndLocationSection />
 
-        {/* 9. Frequently Asked Questions */}
+        {/* 8. Frequently Asked Questions */}
         <FAQSection />
         </Suspense>
       </main>

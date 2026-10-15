@@ -5,6 +5,7 @@ import { HeroSanctuaryArt } from './SpaArt';
 import { SPA_DETAILS } from '../data/spaData';
 import { MagneticButton } from './MagneticButton';
 import { TrustStats } from './TrustStats';
+import { SERVICES } from '../data/serviceMenu';
 
 interface HeroSectionProps {
   onOpenBooking: () => void;
@@ -205,10 +206,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     </span>
                     <div>
                       <p className="text-xs font-semibold text-[#FAF6F0] uppercase tracking-wider">
-                        Massage & Hammam Rates
+                        Official Service Menu
                       </p>
                       <p className="text-xs text-[#A2B5A8]">
-                        Starting from ₦15,000 · Verified Menu
+                        {SERVICES.length} listed services · View prices
                       </p>
                     </div>
                   </div>

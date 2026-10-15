@@ -296,7 +296,7 @@ export const SERVICES: Service[] = [
   {
     id: 'luxury-mani-pedi-spa-60',
     name: 'Luxury Spa Manicure & Pedicure',
-    category: 'nail',
+    category: 'self-care',
     durationMinutes: 60,
     durationLabel: '60 Minutes',
     priceNGN: 22000,
@@ -314,7 +314,7 @@ export const SERVICES: Service[] = [
   {
     id: 'organic-body-scrub-45',
     name: 'Organic Coffee & Coconut Body Scrub',
-    category: 'body',
+    category: 'hammam',
     durationMinutes: 45,
     durationLabel: '45 Minutes',
     priceNGN: 25000,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 import { Sparkles, Calendar, Award, ShieldCheck } from 'lucide-react';
+import { SERVICES, SERVICE_CATEGORY_LABELS } from '../data/serviceMenu';
 
 interface StatItemProps {
   finalValue: number;
@@ -79,17 +80,15 @@ export const TrustStats: React.FC = () => {
     <div className="mt-14 pt-10 border-t border-[#223E2E]">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10">
         <AnimatedStat
-          finalValue={9}
-          suffix="+"
-          label="Therapeutic Offerings"
-          sublabel="From official Moroccan hammam to deep tissue & hot stone"
+          finalValue={SERVICES.length}
+          label="Menu Services"
+          sublabel="Treatments listed on the current spa menu"
           icon={Award}
         />
         <AnimatedStat
-          finalValue={100}
-          suffix="%"
-          label="Authentic Beldi Rituals"
-          sublabel="Directly imported Moroccan black soap & volcanic clay"
+          finalValue={Object.keys(SERVICE_CATEGORY_LABELS).length}
+          label="Menu Categories"
+          sublabel="Massage, hammam, waxing, facials & self care"
           icon={Sparkles}
         />
         <AnimatedStat

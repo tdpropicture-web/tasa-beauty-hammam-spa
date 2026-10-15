@@ -49,10 +49,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             Moroccan Hammam
           </a>
           <a
-            href="#packages"
+            href="#treatments"
             className="whitespace-nowrap shrink-0 hover:text-[#FAF6F0] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-gradient-to-r after:from-[#D4AF37] after:to-[#EBD6A7] hover:after:w-full after:transition-all"
           >
-            Curated Packages
+            Service Menu
           </a>
           <a
             href="#about-sanctuary"
@@ -137,11 +137,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               Moroccan Hammam Rituals
             </a>
             <a
-              href="#packages"
+              href="#treatments"
               onClick={() => setMobileMenuOpen(false)}
               className="text-[#FAF6F0] hover:text-[#D4AF37] transition-colors py-1"
             >
-              Curated Wellness Packages
+              Complete Service Menu
             </a>
             <a
               href="#about-sanctuary"

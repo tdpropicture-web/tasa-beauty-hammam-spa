@@ -18,8 +18,9 @@ import {
   Download,
   Loader2,
 } from 'lucide-react';
-import { Service, SpaPackage, BookingData } from '../types';
-import { SERVICES, PACKAGES, SPA_DETAILS } from '../data/spaData';
+import { BookingData } from '../types';
+import { SPA_DETAILS } from '../data/spaData';
+import { SERVICES } from '../data/serviceMenu';
 import { CurrencyCode, formatPrice } from '../utils/currency';
 
 interface BookingModalProps {
@@ -35,22 +36,18 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   preSelectedServiceId,
   currency,
 }) => {
-  // Step state: 1: Service selection, 2: Date & Time, 3: Enhancements & Therapist, 4: Guest details, 5: Confirmation
+  // Step state: 1: Service selection, 2: Date & Time, 3: Therapist, 4: Guest details, 5: Confirmation
   const [step, setStep] = useState<number>(1);
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
-  // Selected item state
-  const [selectedItemType, setSelectedItemType] = useState<'service' | 'package'>('service');
   const [selectedItemId, setSelectedItemId] = useState<string>(preSelectedServiceId || 'swedish-massage-60');
 
   // Date and Time
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('11:00 AM');
 
-  // Therapist preference & Add-ons
+  // Therapist preference
   const [therapistPreference, setTherapistPreference] = useState<string>('Any Available Senior Therapist');
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
-
   // Guest Contact Info
   const [guestName, setGuestName] = useState<string>('');
   const [guestEmail, setGuestEmail] = useState<string>('');
@@ -74,48 +71,21 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   // Sync pre-selected service when modal opens
   useEffect(() => {
     if (preSelectedServiceId) {
-      const isPkg = PACKAGES.some((p) => p.id === preSelectedServiceId);
-      if (isPkg) {
-        setSelectedItemType('package');
-        setSelectedItemId(preSelectedServiceId);
-      } else {
-        setSelectedItemType('service');
-        setSelectedItemId(preSelectedServiceId);
-      }
+      const selectedService = SERVICES.find(
+        (service) => service.id === preSelectedServiceId && !service.enquiryOnly
+      );
+      setSelectedItemId(selectedService?.id ?? SERVICES[0].id);
     }
   }, [preSelectedServiceId]);
 
   if (!isOpen) return null;
 
   // Find currently active item
-  const currentService = SERVICES.find((s) => s.id === selectedItemId);
-  const currentPackage = PACKAGES.find((p) => p.id === selectedItemId);
-  const itemName =
-    selectedItemType === 'service'
-      ? currentService?.name || 'Selected Treatment'
-      : currentPackage?.name || 'Selected Package';
-  const itemDuration =
-    selectedItemType === 'service'
-      ? currentService?.durationLabel || '60 Mins'
-      : currentPackage?.durationLabel || '90 Mins';
-  const basePriceNGN =
-    selectedItemType === 'service'
-      ? currentService?.priceNGN || 24000
-      : currentPackage?.priceNGN || 68000;
-
-  // Add-ons list
-  const ADD_ONS = [
-    { id: 'steam-extension', name: '+20 Min Eucalyptus Steam Bath', priceNGN: 15000 },
-    { id: 'aromatherapy-oil', name: 'Custom Organic Aromatherapy Blend', priceNGN: 6000 },
-    { id: 'scalp-acupressure', name: 'Extended 15 Min Scalp Acupressure', priceNGN: 10000 },
-  ];
-
-  const addOnsTotal = selectedAddOns.reduce((acc, addOnId) => {
-    const match = ADD_ONS.find((a) => a.id === addOnId);
-    return acc + (match ? match.priceNGN : 0);
-  }, 0);
-
-  const totalPriceNGN = basePriceNGN + addOnsTotal;
+  const currentService = SERVICES.find((service) => service.id === selectedItemId) ?? SERVICES[0];
+  const itemName = currentService.name;
+  const itemDuration = currentService.durationLabel || 'To be confirmed';
+  const basePriceNGN = currentService.priceNGN;
+  const totalPriceNGN = basePriceNGN;
 
   const timeSlots = [
     '09:30 AM',
@@ -157,7 +127,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         guestEmail,
         guestPhone,
         notes,
-        addOns: selectedAddOns,
         status: 'confirmed',
         confirmationCode: code,
         createdAt: new Date().toISOString(),
@@ -268,7 +237,7 @@ END:VCALENDAR`;
               <span className="text-[#FAF6F0]">
                 {step === 1 && 'Select Treatment'}
                 {step === 2 && 'Schedule Date & Time'}
-                {step === 3 && 'Therapist & Enhancements'}
+                {step === 3 && 'Therapist Preference'}
                 {step === 4 && 'Guest Information'}
               </span>
             </div>
@@ -287,135 +256,57 @@ END:VCALENDAR`;
 
         {/* Step Content */}
         <div className="p-6 sm:p-8 flex-1">
-          {/* STEP 1: Select Treatment or Package */}
+          {/* STEP 1: Select a menu treatment */}
           {step === 1 && (
             <div className="space-y-6">
               <div>
                 <h4 className="text-base font-serif font-bold text-[#1E2B24]">
-                  Choose Your Wellness Experience
+                  Choose a Treatment
                 </h4>
                 <p className="text-xs text-[#526456] mt-0.5">
-                  Select an individual treatment or an all-inclusive signature package.
+                  Select from the current spa menu. Durations are shown only when listed.
                 </p>
               </div>
 
-              {/* Toggle Treatment vs Package */}
-              <div className="flex gap-2 p-1 bg-[#EAE3D9] rounded-lg max-w-xs">
-                <button
-                  onClick={() => {
-                    setSelectedItemType('service');
-                    setSelectedItemId('swedish-massage-60');
-                  }}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors ${
-                    selectedItemType === 'service'
-                      ? 'bg-white text-[#17231B] shadow-xs'
-                      : 'text-[#4A5D50]'
-                  }`}
-                >
-                  Treatments ({SERVICES.length})
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedItemType('package');
-                    setSelectedItemId('the-ultimate-rejuvenation');
-                  }}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors ${
-                    selectedItemType === 'package'
-                      ? 'bg-white text-[#17231B] shadow-xs'
-                      : 'text-[#4A5D50]'
-                  }`}
-                >
-                  Packages ({PACKAGES.length})
-                </button>
-              </div>
-
-              {/* Items List */}
-              <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
-                {selectedItemType === 'service'
-                  ? SERVICES.map((service) => (
-                      <label
-                        key={service.id}
-                        className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
-                          selectedItemId === service.id
-                            ? 'bg-white border-[#C5A880] ring-1 ring-[#C5A880]/30 shadow-xs'
-                            : 'bg-white/60 border-[#EAE3D9] hover:border-[#D0C4B4]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <input
-                            type="radio"
-                            name="treatmentChoice"
-                            checked={selectedItemId === service.id}
-                            onChange={() => setSelectedItemId(service.id)}
-                            className="accent-[#223429] shrink-0"
-                          />
-                          {service.imageUrl && (
-                            <img
-                              src={service.imageUrl}
-                              alt={service.name}
-                              className="w-12 h-12 rounded-lg object-cover shrink-0 border border-[#EAE3D9]"
-                            />
-                          )}
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-semibold text-[#1E2B24] truncate">
-                                {service.name}
-                              </span>
-                              <span className="text-xs text-[#6B7E70] shrink-0">
-                                ({service.durationLabel})
-                              </span>
-                            </div>
-                            <p className="text-xs text-[#526456] line-clamp-1 mt-0.5">
-                              {service.shortDescription}
-                            </p>
-                          </div>
-                        </div>
-
-                        <span className="text-sm font-serif font-bold text-[#17231B] tabular-nums shrink-0 ml-3">
-                          {formatPrice(service.priceNGN, currency)}
+              <div className="space-y-2.5 max-h-[400px] overflow-y-auto pr-1">
+                {SERVICES.filter((service) => !service.enquiryOnly).map((service) => (
+                  <label
+                    key={service.id}
+                    className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
+                      selectedItemId === service.id
+                        ? 'bg-white border-[#C5A880] ring-1 ring-[#C5A880]/30 shadow-xs'
+                        : 'bg-white/60 border-[#EAE3D9] hover:border-[#D0C4B4]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <input
+                        type="radio"
+                        name="treatmentChoice"
+                        checked={selectedItemId === service.id}
+                        onChange={() => setSelectedItemId(service.id)}
+                        className="accent-[#223429] shrink-0"
+                      />
+                      <div className="min-w-0">
+                        <span className="text-sm font-semibold text-[#1E2B24] block">
+                          {service.name}
                         </span>
-                      </label>
-                    ))
-                  : PACKAGES.map((pkg) => (
-                      <label
-                        key={pkg.id}
-                        className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
-                          selectedItemId === pkg.id
-                            ? 'bg-white border-[#C5A880] ring-1 ring-[#C5A880]/30 shadow-xs'
-                            : 'bg-white/60 border-[#EAE3D9] hover:border-[#D0C4B4]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <input
-                            type="radio"
-                            name="packageChoice"
-                            checked={selectedItemId === pkg.id}
-                            onChange={() => setSelectedItemId(pkg.id)}
-                            className="accent-[#223429] shrink-0"
-                          />
-                          {pkg.imageUrl && (
-                            <img
-                              src={pkg.imageUrl}
-                              alt={pkg.name}
-                              className="w-12 h-12 rounded-lg object-cover shrink-0 border border-[#EAE3D9]"
-                            />
-                          )}
-                          <div className="min-w-0">
-                            <span className="text-sm font-semibold text-[#1E2B24] truncate block">
-                              {pkg.name}
-                            </span>
-                            <p className="text-xs text-[#526456] line-clamp-1 mt-0.5">
-                              {pkg.durationLabel} · {pkg.inclusions.length} Inclusions
-                            </p>
-                          </div>
-                        </div>
+                        {(service.durationLabel || service.shortDescription) && (
+                          <p className="text-xs text-[#526456] mt-0.5">
+                            {[service.durationLabel, service.shortDescription].filter(Boolean).join(' · ')}
+                          </p>
+                        )}
+                      </div>
+                    </div>
 
-                        <span className="text-sm font-serif font-bold text-[#17231B] tabular-nums shrink-0 ml-3">
-                          {formatPrice(pkg.priceNGN, currency)}
-                        </span>
-                      </label>
-                    ))}
+                    <span className="text-sm font-serif font-bold text-[#17231B] tabular-nums shrink-0 ml-3">
+                      {formatPrice(service.priceNGN, currency)}
+                    </span>
+                  </label>
+                ))}
               </div>
+              <p className="text-xs text-[#6B7E70]">
+                Skin Tags Removal is priced at ₦20,000 and above; please enquire with the spa for a quote.
+              </p>
             </div>
           )}
 
@@ -474,21 +365,23 @@ END:VCALENDAR`;
               <div className="p-4 bg-[#F4EFEA] rounded-xl border border-[#EAE3D9] text-xs text-[#526456] flex items-start gap-2.5">
                 <Clock className="w-4 h-4 text-[#8C6D42] shrink-0 mt-0.5" />
                 <span>
-                  Estimated duration for this visit: <strong>{itemDuration}</strong> + 15 minutes welcome intake.
+                  {currentService.durationLabel
+                    ? <>Listed treatment duration: <strong>{currentService.durationLabel}</strong>.</>
+                    : 'Treatment duration will be confirmed by the spa.'}
                 </span>
               </div>
             </div>
           )}
 
-          {/* STEP 3: Therapist & Add-ons */}
+          {/* STEP 3: Therapist preference */}
           {step === 3 && (
             <div className="space-y-6">
               <div>
                 <h4 className="text-base font-serif font-bold text-[#1E2B24]">
-                  Therapist Preference & Enhancements
+                  Therapist Preference
                 </h4>
                 <p className="text-xs text-[#526456] mt-0.5">
-                  Customize your comfort and explore ritual enhancements.
+                  Let us know your preferred therapist, if any.
                 </p>
               </div>
 
@@ -519,49 +412,6 @@ END:VCALENDAR`;
                 </div>
               </div>
 
-              {/* Add-ons */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#1E2B24] mb-2">
-                  Optional Ritual Add-ons
-                </label>
-                <div className="space-y-2.5">
-                  {ADD_ONS.map((addOn) => {
-                    const isChecked = selectedAddOns.includes(addOn.id);
-                    return (
-                      <label
-                        key={addOn.id}
-                        className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
-                          isChecked
-                            ? 'bg-white border-[#C5A880] ring-1 ring-[#C5A880]/30 shadow-xs'
-                            : 'bg-white/60 border-[#EAE3D9] hover:border-[#D0C4B4]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => {
-                              if (isChecked) {
-                                setSelectedAddOns(selectedAddOns.filter((id) => id !== addOn.id));
-                              } else {
-                                setSelectedAddOns([...selectedAddOns, addOn.id]);
-                              }
-                            }}
-                            className="accent-[#223429]"
-                          />
-                          <span className="text-xs font-medium text-[#1E2B24]">
-                            {addOn.name}
-                          </span>
-                        </div>
-
-                        <span className="text-xs font-serif font-bold text-[#17231B] tabular-nums">
-                          +{formatPrice(addOn.priceNGN, currency)}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
             </div>
           )}
 
@@ -660,15 +510,9 @@ END:VCALENDAR`;
               {/* Order Summary Box */}
               <div className="p-4 bg-white rounded-xl border border-[#EAE3D9] space-y-2 text-xs">
                 <div className="flex justify-between text-[#526456]">
-                  <span>{itemName} ({itemDuration})</span>
+                  <span>{itemName}{currentService.durationLabel ? ` (${currentService.durationLabel})` : ''}</span>
                   <span className="tabular-nums">{formatPrice(basePriceNGN, currency)}</span>
                 </div>
-                {addOnsTotal > 0 && (
-                  <div className="flex justify-between text-[#526456]">
-                    <span>Selected Add-ons ({selectedAddOns.length})</span>
-                    <span className="tabular-nums">+{formatPrice(addOnsTotal, currency)}</span>
-                  </div>
-                )}
                 <div className="pt-2 border-t border-[#EAE3D9] flex justify-between font-bold text-sm text-[#1E2B24]">
                   <span>Total Amount</span>
                   <span className="font-serif text-base text-[#8C6D42] tabular-nums">

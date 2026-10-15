@@ -1,16 +1,18 @@
-export type ServiceCategory = 'massage' | 'hammam' | 'facial' | 'body' | 'nail' | 'package';
+export type ServiceCategory = 'massage' | 'hammam' | 'waxing' | 'facial' | 'self-care';
 
 export interface Service {
   id: string;
   name: string;
   category: ServiceCategory;
-  durationMinutes: number;
-  durationLabel: string;
+  durationMinutes?: number;
+  durationLabel?: string;
   priceNGN: number;
-  shortDescription: string;
-  fullDescription: string;
-  benefits: string[];
-  preparation: string;
+  priceQualifier?: string;
+  enquiryOnly?: boolean;
+  shortDescription?: string;
+  fullDescription?: string;
+  benefits?: string[];
+  preparation?: string;
   isPopular?: boolean;
   isSignature?: boolean;
   isFromFlyer?: boolean;

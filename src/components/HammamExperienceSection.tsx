@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Calendar, Droplets, Sparkles, Wind, Flame, ArrowRight } from 'lucide-react';
 import { HammamArt } from './SpaArt';
 import { CurrencyCode, formatPrice } from '../utils/currency';
+import { SERVICES } from '../data/serviceMenu';
 
 interface HammamExperienceProps {
   onBookHammam: () => void;
@@ -13,32 +14,16 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
   onBookHammam,
   currency,
 }) => {
-  const steps = [
-    {
-      num: '01',
-      title: 'Thermal Steam Softening',
-      description: 'Enter the heated steam sanctuary infused with wild eucalyptus. The radiant warmth opens pores, releases bronchial pathways, and prepares muscles for deep purification.',
-      icon: Wind,
-    },
-    {
-      num: '02',
-      title: 'Savon Beldi Application',
-      description: 'Anointing with authentic Moroccan black soap crafted from macerated olives, olive oil, and eucalyptus. The alkaline soap naturally emulsifies impurities and dissolves dead skin cells.',
-      icon: Droplets,
-    },
-    {
-      num: '03',
-      title: 'Traditional Kessa Scrub',
-      description: 'Using a genuine Moroccan Kessa textured mitt, our female attendant performs a methodical full-body scrub that visibly sloughs away dull skin layers and stimulates cellular turnover.',
-      icon: Sparkles,
-    },
-    {
-      num: '04',
-      title: 'Rhassoul Clay & Argan Polish',
-      description: 'Volcanic mineral clay from the Atlas Mountains enriches the skin with silica and magnesium, followed by pure cold-pressed argan oil to lock in velvety softness.',
-      icon: Flame,
-    },
-  ];
+  const serviceIcons = [Wind, Droplets, Sparkles, Flame];
+  const steps = SERVICES.filter((service) => service.category === 'hammam').map((service, index) => ({
+    num: String(index + 1).padStart(2, '0'),
+    title: service.name,
+    description: `${formatPrice(service.priceNGN, currency)}${service.priceQualifier ? ` ${service.priceQualifier}` : ''}`,
+    icon: serviceIcons[index % serviceIcons.length],
+  }));
+  const featuredServices = ['steam-bath-20', 'glow-hammam', 'cleopatra-hammam']
+    .map((id) => SERVICES.find((service) => service.id === id))
+    .filter((service) => service !== undefined);
 
   return (
     <section id="hammam-experience" className="py-24 bg-gradient-to-b from-[#09150E] via-[#0E2016] to-[#0A160F] text-[#FAF6F0] border-b border-[#C5A880]/25 relative overflow-hidden">
@@ -72,7 +57,7 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-[#D4AF37]/35 aspect-[4/3] group shadow-[0_20px_50px_rgba(0,0,0,0.6)] bg-[#09150E]">
               <img
                 src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85"
-                alt="Authentic Moroccan Hammam Chambers with Kessa and Savon Beldi at Tasa Spa"
+                alt="Hammam treatment room at Tasa Beauty & Hammam Spa"
                 className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -90,9 +75,9 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
               {/* Decorative top badge */}
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#09150E]/85 backdrop-blur-md border border-[#D4AF37]/30 text-[11px] text-[#FAF6F0]">
                 <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
-                <span className="font-serif italic text-[#F5E5C4]">Heated Tadelakt Chamber</span>
+                <span className="font-serif italic text-[#F5E5C4]">Hammam Treatments</span>
                 <span className="text-[#C5A880]">·</span>
-                <span className="text-xs uppercase tracking-wider text-[#A2B5A8]">Savon Beldi Ritual</span>
+                <span className="text-xs uppercase tracking-wider text-[#A2B5A8]">Current Service Menu</span>
               </div>
               
               <div className="absolute bottom-5 left-5 right-5 text-white z-10">
@@ -100,10 +85,15 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
                   Tasa Hammam Suite · Gwarinpa
                 </span>
                 <h3 className="text-xl font-serif font-bold mt-1 text-white">
-                  Traditional Moroccan Heated Chambers
+                  Hammam & Body Scrub Menu
                 </h3>
                 <p className="text-xs text-[#FAF6F0]/85 mt-1">
-                  Single sessions from ₦15,000 · Full Kessa rituals from ₦38,000
+                  {featuredServices.map((service, index) => (
+                    <React.Fragment key={service.id}>
+                      {index > 0 ? ' · ' : ''}
+                      {service.name} {formatPrice(service.priceNGN, currency)}
+                    </React.Fragment>
+                  ))}
                 </p>
               </div>
             </div>
@@ -118,9 +108,9 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
               transition={{ duration: 0.6 }}
               className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4AF37] font-semibold mb-3"
             >
-              <span>Ancient Heritage Rituals</span>
+              <span>Hammam & Body Scrubs</span>
               <span aria-hidden="true" className="text-[#C5A880]">·</span>
-              <span>Exclusive to Tasa Spa</span>
+              <span>Current Service Menu</span>
             </motion.div>
 
             <motion.h2
@@ -130,9 +120,9 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
               transition={{ duration: 0.65, delay: 0.1 }}
               className="text-3xl sm:text-4xl lg:text-[2.8rem] font-serif font-medium text-[#FAF6F0] tracking-tight leading-[1.12]"
             >
-              The Moroccan Hammam:{' '}
+              Hammam Services:{' '}
               <span className="gold-gradient-text font-semibold">
-                Purification for Body & Soul.
+                Treatments & Pricing.
               </span>
             </motion.h2>
 
@@ -143,7 +133,7 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-5 text-base text-[#C8D6CD] leading-relaxed"
             >
-              In Moroccan tradition, the Hammam is far more than a bath—it is a sacred sanctuary of purification, rebirth, and profound tranquility. At our Gwarinpa location, we bring this timeless North African tradition to Abuja with genuine imported black soap, Atlas clay, and authentic techniques.
+              Browse the hammam and body scrub services currently listed by Tasa Beauty & Hammam Spa. Names and prices below follow the spa’s service menu.
             </motion.p>
 
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -191,7 +181,7 @@ export const HammamExperienceSection: React.FC<HammamExperienceProps> = ({
                 className="inline-flex items-center gap-2 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-[#0A160F] bg-gradient-to-r from-[#D4AF37] via-[#C5A880] to-[#B38F56] hover:from-[#E5C378] hover:to-[#D4AF37] rounded-xl transition-all shadow-lg shadow-[#D4AF37]/25 active:scale-95"
               >
                 <Calendar className="w-4 h-4 text-[#0A160F]" />
-                Book Authentic Hammam Session
+                Book Glow Hammam
               </button>
               <a
                 href="#treatments"

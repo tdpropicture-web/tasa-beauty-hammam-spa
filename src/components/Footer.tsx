@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Check, Heart, Shield, Sparkles } from 'lucide-react';
 import { SPA_DETAILS } from '../data/spaData';
+import { SERVICES } from '../data/serviceMenu';
+import { formatPrice } from '../utils/currency';
 
 interface FooterProps {
   onOpenBooking: () => void;
@@ -8,6 +10,9 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenFlyerMenu }) => {
+  const featuredServices = ['swedish-massage-60', 'deep-tissue-60', 'hot-stone-massage-60', 'glow-hammam']
+    .map((id) => SERVICES.find((service) => service.id === id))
+    .filter((service) => service !== undefined);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [showPoliciesModal, setShowPoliciesModal] = useState(false);
@@ -66,8 +71,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenFlyerMenu }
                 </a>
               </li>
               <li>
-                <a href="#packages" className="hover:text-[#FAF6F0] transition-colors">
-                  Wellness Packages
+                <a href="#treatments" className="hover:text-[#FAF6F0] transition-colors">
+                  Complete Service Menu
                 </a>
               </li>
               <li>
@@ -100,14 +105,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenFlyerMenu }
                   className="hover:text-[#D4AF37] transition-colors text-left flex items-center gap-1.5"
                 >
                   <Sparkles className="w-3 h-3 text-[#D4AF37]" />
-                  Official Massage Therapy Flyer
+                  Official Service Menu
                 </button>
               </li>
-              <li>Swedish Massage (60 min · ₦24,000)</li>
-              <li>Deep Tissue Massage (60 min · ₦29,000)</li>
-              <li>Hot Stone Basalt (60 min · ₦35,000)</li>
-              <li>Traditional Moroccan Hammam (60 min · ₦38,000)</li>
-              <li>Pregnancy Nurturing Massage (45 min · ₦27,000)</li>
+              {featuredServices.map((service) => (
+                <li key={service.id}>
+                  {service.name}{service.durationLabel ? ` (${service.durationLabel})` : ''} · {formatPrice(service.priceNGN, 'NGN')}
+                </li>
+              ))}
             </ul>
           </div>
 
