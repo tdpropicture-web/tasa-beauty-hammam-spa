@@ -69,7 +69,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             >
               <span>Moroccan Hammam Sanctuary</span>
               <span aria-hidden="true" className="text-[#C5A880]">·</span>
-              <span>1st Avenue, Gwarinpa</span>
+              <span>2nd Avenue, Gwarinpa</span>
               <span aria-hidden="true" className="text-[#C5A880]">·</span>
               <span>Open 7 Days</span>
             </motion.div>
@@ -140,7 +140,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             >
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0" />
-                <span>Malcolm X Street, 1st Ave, Gwarinpa</span>
+                <span>INU UMORU Avenue, opposite H-Medix</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-[#D4AF37] shrink-0" />
@@ -248,4 +248,3 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     </section>
   );
 };
-

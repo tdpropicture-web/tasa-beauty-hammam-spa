@@ -138,7 +138,7 @@ export const GiftVoucherSection: React.FC<GiftVoucherSectionProps> = ({ currency
                     Tasa Beauty & Hammam Spa
                   </h3>
                   <p className="text-[11px] text-[#A2B5A8] mt-0.5">
-                    1st Avenue, Gwarinpa, Abuja
+                    2nd Avenue, opposite H-Medix, Gwarinpa
                   </p>
                 </div>
                 <div className="w-12 h-12 rounded-full border-2 border-[#D4AF37] flex items-center justify-center text-sm font-serif font-bold text-[#D4AF37] bg-[#14261B] shadow-[0_0_12px_rgba(212,175,55,0.25)]">

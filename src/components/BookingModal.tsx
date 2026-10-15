@@ -193,8 +193,8 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 SUMMARY:Tasa Spa: ${confirmedBooking.serviceName}
-DESCRIPTION:Reservation Reference: ${confirmedBooking.confirmationCode}\\nTreatment: ${confirmedBooking.serviceName} (${confirmedBooking.duration})\\nTherapist: ${confirmedBooking.therapistPreference}\\nAddress: 7, 451 Road, Malcolm X Street, 1st Avenue, Gwarinpa, Abuja
-LOCATION:7, 451 Road, Malcolm X Street, 1st Avenue, Gwarinpa, Abuja
+DESCRIPTION:Reservation Reference: ${confirmedBooking.confirmationCode}\\nTreatment: ${confirmedBooking.serviceName} (${confirmedBooking.duration})\\nTherapist: ${confirmedBooking.therapistPreference}\\nAddress: ${SPA_DETAILS.address}
+LOCATION:${SPA_DETAILS.address}
 DTSTART:${cleanDate}T100000Z
 DTEND:${cleanDate}T113000Z
 STATUS:CONFIRMED
@@ -218,14 +218,14 @@ END:VCALENDAR`;
     const details = encodeURIComponent(
       `Appointment Reference: ${confirmedBooking.confirmationCode}\nTreatment: ${confirmedBooking.serviceName} (${confirmedBooking.duration})\nTherapist: ${confirmedBooking.therapistPreference}\nConcierge Contact: 07011480966`
     );
-    const location = encodeURIComponent('7, 451 Road, Malcolm X Street, 1st Avenue, Gwarinpa, Abuja');
+    const location = encodeURIComponent(SPA_DETAILS.address);
     const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${cleanDate}T100000Z/${cleanDate}T113000Z&details=${details}&location=${location}`;
     window.open(url, '_blank');
   };
 
   const handleWhatsAppForward = () => {
     if (!confirmedBooking) return;
-    const msg = `Hello Tasa Beauty & Hammam Spa, I have scheduled an appointment on your website.\n\n*Confirmation Code:* ${confirmedBooking.confirmationCode}\n*Guest:* ${confirmedBooking.guestName}\n*Treatment:* ${confirmedBooking.serviceName} (${confirmedBooking.duration})\n*Date & Time:* ${confirmedBooking.date} at ${confirmedBooking.timeSlot}\n*Total:* ${formatPrice(confirmedBooking.totalPriceNGN, 'NGN')}\n*Phone:* ${confirmedBooking.guestPhone}\n\nPlease confirm availability for my arrival at 1st Avenue Gwarinpa. Thank you!`;
+    const msg = `Hello Tasa Beauty & Hammam Spa, I have scheduled an appointment on your website.\n\n*Confirmation Code:* ${confirmedBooking.confirmationCode}\n*Guest:* ${confirmedBooking.guestName}\n*Treatment:* ${confirmedBooking.serviceName} (${confirmedBooking.duration})\n*Date & Time:* ${confirmedBooking.date} at ${confirmedBooking.timeSlot}\n*Total:* ${formatPrice(confirmedBooking.totalPriceNGN, 'NGN')}\n*Phone:* ${confirmedBooking.guestPhone}\n\nPlease confirm availability for my arrival at ${SPA_DETAILS.address}. Thank you!`;
     window.open(`https://wa.me/${SPA_DETAILS.primaryWhatsApp}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
@@ -246,7 +246,7 @@ END:VCALENDAR`;
                 Online Reservation & Concierge
               </h3>
               <p className="text-xs text-[#D4AF37]">
-                Tasa Beauty & Hammam Spa · 1st Avenue Gwarinpa
+                Tasa Beauty & Hammam Spa · 2nd Avenue, Gwarinpa
               </p>
             </div>
           </div>

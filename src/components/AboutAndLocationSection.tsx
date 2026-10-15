@@ -82,7 +82,7 @@ export const AboutAndLocationSection: React.FC = () => {
                       {SPA_DETAILS.address}
                     </p>
                     <p className="text-xs text-[#6A8274] mt-1 flex items-center gap-1.5">
-                      <Car className="w-3.5 h-3.5" /> Off 1st Avenue, Malcolm X Street · Dedicated visitor parking
+                      <Car className="w-3.5 h-3.5" /> Opposite H-Medix · Dedicated visitor parking
                     </p>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export const AboutAndLocationSection: React.FC = () => {
                   Direct WhatsApp Chat
                 </a>
                 <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent('7, 451 road, Malcolm X street, 1st Avenue, Gwarinpa, Abuja')}`}
+                  href={`https://maps.google.com/?q=${encodeURIComponent(SPA_DETAILS.address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 py-3 text-center text-xs font-bold uppercase tracking-wider text-[#0E2016] border border-[#D4AF37] rounded-xl hover:bg-[#F2EAE0] transition-colors"
